@@ -42,16 +42,17 @@ test('setup', function (t) {
 test('createEntryStream full request', function (t) {
   setup()
   var cachePath = path.join(CACHE_DIR, '.cache.json')
+  var dataTime = +(new Date())
   server.get('/-/all').once().reply(200, {
-    '_updated': 1234,
+    '_updated': dataTime,
     'bar': { name: 'bar', version: '1.0.0' },
     'foo': { name: 'foo', version: '1.0.0' }
   }, {
-    date: Date.now() // should never be used.
+    date: 1234 // should never be used.
   })
   _createEntryStream(cachePath, ALL, {}, 600, function (err, stream, latest) {
     if (err) throw err
-    t.equals(latest, 1234, '`latest` correctly extracted')
+    t.equals(latest, dataTime, '`latest` correctly extracted')
     t.ok(stream, 'returned a stream')
     var results = []
     stream.on('data', function (pkg) {
@@ -77,7 +78,6 @@ test('createEntryStream cache only', function (t) {
   setup()
   var now = Date.now()
   var cacheTime = now - 100000
-  server.get('/-/all/since?stale=update_after&startkey=' + cacheTime).once().reply(404, {})
   var cachePath = path.join(CACHE_DIR, '.cache.json')
   var fixture = new Tacks(File({
     '_updated': cacheTime,
@@ -89,7 +89,7 @@ test('createEntryStream cache only', function (t) {
   fixture.create(cachePath)
   _createEntryStream(cachePath, ALL, {}, 600, function (err, stream, latest) {
     if (err) throw err
-    t.equals(latest, cacheTime, '`latest` correctly extracted from cache')
+    t.equals(latest, 0, '`latest` is 0 if only cache data')
     t.ok(stream, 'returned a stream')
     var results = []
     stream.on('data', function (pkg) {
@@ -112,7 +112,7 @@ test('createEntryStream cache only', function (t) {
 test('createEntryStream merged stream', function (t) {
   setup()
   var now = Date.now()
-  var cacheTime = now - 100000
+  var cacheTime = now - 6000000
   server.get('/-/all/since?stale=update_after&startkey=' + cacheTime).once().reply(200, {
     'bar': { name: 'bar', version: '2.0.0' },
     'car': { name: 'car', version: '1.0.0' },

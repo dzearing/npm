@@ -47,13 +47,13 @@ test('setup', function (t) {
 
 test('updateIndex full request', function (t) {
   setup()
-  var updated = 1234
+  var updated = Date.now()
   server.get('/-/all').once().reply(200, {
-    '_updated': updated,
+    '_updated': 1234,
     'bar': { name: 'bar', version: '1.0.0' },
     'foo': { name: 'foo', version: '1.0.0' }
   }, {
-    date: Date.now() // should never be used.
+    date: updated
   })
   updateIndex(600, function (err, stream) {
     if (err) throw err
@@ -131,7 +131,7 @@ test('updateIndex cache only', function (t) {
 test('createEntryStream merged stream', function (t) {
   setup()
   var now = Date.now()
-  var cacheTime = now - 100000
+  var cacheTime = now - 601000
   var reqTime = (new Date(now)).toISOString()
   server.get('/-/all/since?stale=update_after&startkey=' + cacheTime).once().reply(200, {
     'bar': { name: 'bar', version: '2.0.0' },
