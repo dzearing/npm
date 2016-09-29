@@ -50,9 +50,10 @@ test('createEntryStream full request', function (t) {
   }, {
     date: 1234 // should never be used.
   })
-  _createEntryStream(cachePath, ALL, {}, 600, function (err, stream, latest) {
+  _createEntryStream(cachePath, ALL, {}, 600, function (err, stream, latest, newEntries) {
     if (err) throw err
     t.equals(latest, dataTime, '`latest` correctly extracted')
+    t.ok(newEntries, 'new entries need to be written to cache')
     t.ok(stream, 'returned a stream')
     var results = []
     stream.on('data', function (pkg) {
@@ -87,10 +88,11 @@ test('createEntryStream cache only', function (t) {
     other: { name: 'other', version: '1.0.0' }
   }))
   fixture.create(cachePath)
-  _createEntryStream(cachePath, ALL, {}, 600, function (err, stream, latest) {
+  _createEntryStream(cachePath, ALL, {}, 600, function (err, stream, latest, newEntries) {
     if (err) throw err
-    t.equals(latest, 0, '`latest` is 0 if only cache data')
+    t.equals(latest, cacheTime, '`latest` is cache time')
     t.ok(stream, 'returned a stream')
+    t.notOk(newEntries, 'cache only means no need to write to cache')
     var results = []
     stream.on('data', function (pkg) {
       results.push(pkg)
@@ -129,10 +131,11 @@ test('createEntryStream merged stream', function (t) {
     other: { name: 'other', version: '1.0.0' }
   }))
   fixture.create(cachePath)
-  _createEntryStream(cachePath, ALL, {}, 600, function (err, stream, latest) {
+  _createEntryStream(cachePath, ALL, {}, 600, function (err, stream, latest, newEntries) {
     if (err) throw err
     t.equals(latest, now, '`latest` correctly extracted from header')
     t.ok(stream, 'returned a stream')
+    t.ok(newEntries, 'cache update means entries should be written')
     var results = []
     stream.on('data', function (pkg) {
       results.push(pkg)
@@ -163,10 +166,11 @@ test('createEntryStream no sources', function (t) {
   setup()
   var cachePath = path.join(CACHE_DIR, '.cache.json')
   server.get('/-/all').once().reply(404, {})
-  _createEntryStream(cachePath, ALL, {}, 600, function (err, stream, latest) {
+  _createEntryStream(cachePath, ALL, {}, 600, function (err, stream, latest, newEntries) {
     t.ok(err, 'no sources, got an error')
     t.notOk(stream, 'no stream returned')
     t.notOk(latest, 'no latest returned')
+    t.notOk(newEntries, 'no entries need to be written')
     t.match(err.message, /No search sources available/, 'useful error message')
     server.done()
     cleanup()
