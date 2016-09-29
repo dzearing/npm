@@ -134,7 +134,7 @@
     "inherits",
     "ini",
     "init-package-json",
-    "jsonstream",
+    "JSONStream",
     "lockfile",
     "lodash._baseindexof",
     "lodash._baseuniq",
