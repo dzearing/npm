@@ -188,7 +188,8 @@
     "validate-npm-package-name",
     "which",
     "wrappy",
-    "write-file-atomic"
+    "write-file-atomic",
+    "mississippi"
   ],
   "devDependencies": {
     "deep-equal": "~1.0.1",
