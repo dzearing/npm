@@ -177,6 +177,7 @@
     "sha",
     "slide",
     "sorted-object",
+    "sorted-union-stream",
     "strip-ansi",
     "tar",
     "text-table",
