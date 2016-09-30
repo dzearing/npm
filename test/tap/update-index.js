@@ -74,7 +74,7 @@ test('updateIndex full request', function (t) {
       var fileData = JSON.parse(fs.readFileSync(cachePath))
       t.ok(fileData, 'cache contents written to the right file')
       t.deepEquals(fileData, {
-        '_updated': updated,
+        '_updated': 1234,
         bar: {
           name: 'bar',
           version: '1.0.0'
