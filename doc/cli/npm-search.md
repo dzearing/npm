@@ -3,7 +3,7 @@ npm-search(1) -- Search for packages
 
 ## SYNOPSIS
 
-    npm search [-l|--long] [search terms ...]
+    npm search [-l|--long] [--json] [--tab-separated] [search terms ...]
 
     aliases: s, se, find
 
@@ -16,6 +16,20 @@ A trailing `/` will be ignored in this case.  (Note that many regular
 expression characters must be escaped or quoted in most shells.)
 
 ## CONFIGURATION
+
+### json
+
+* Default: false
+* Type: Boolean
+
+Output search results as a JSON array.
+
+### tab-separated
+
+* Default: false
+* Type: Boolean
+
+Output search results as lines with tab-separated columns.
 
 ### long
 

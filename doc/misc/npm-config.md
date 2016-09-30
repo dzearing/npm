@@ -499,9 +499,9 @@ version number, if not already set in package.json.
 
 Whether or not to output JSON data, rather than the normal output.
 
-This feature is currently experimental, and the output data structures
-for many commands is either not implemented in JSON yet, or subject to
-change.  Only the output from `npm ls --json` is currently valid.
+This feature is currently experimental, and the output data structures for many
+commands is either not implemented in JSON yet, or subject to change.  Only the
+output from `npm ls --json` and `npm search --json` are currently valid.
 
 ### key
 
@@ -870,6 +870,17 @@ Whether or not to do SSL key validation when making requests to the
 registry via https.
 
 See also the `ca` config.
+
+### tab-separated
+
+* Default: false
+* Type: Boolean
+
+Whether or not to output tab-separated data, rather than the normal output.
+
+This feature is currently experimental, and the output data structures for many
+commands is either not implemented in tabs yet, or subject to change.  Only the
+output from `npm search --tab-separated` is currently valid.
 
 ### tag
 
