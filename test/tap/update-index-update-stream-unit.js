@@ -142,8 +142,6 @@ test('createEntryUpdateStream bad auth', function (t) {
   var token = 'thisisanauthtoken'
   server.get('/-/all', { authorization: 'Bearer ' + token }).once().reply(401, {
     error: 'unauthorized search request'
-  }, {
-    date: Date.now() // should never be used.
   })
   _createEntryUpdateStream(ALL, { token: token }, 600, 0, function (err, stream, latest) {
     t.ok(err, 'got an error from auth failure')
